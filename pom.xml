@@ -41,6 +41,11 @@
             <artifactId>slf4j-api</artifactId>
             <version>1.7.30</version>
         </dependency>
+        <dependency>
+            <groupId>org.xbib</groupId>
+            <artifactId>guava</artifactId>
+            <version>28.1</version>
+        </dependency>
     </dependencies>
 
 </project>

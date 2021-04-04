@@ -11,15 +11,12 @@ public class OrderItem {
         this.cost = cost;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public int getCost() {
-        return cost;
+    @Override
+    public String toString() {
+        return "OrderItem{" +
+                "name=" + name +
+                " quantity=" + quantity +
+                " cost=" + cost +
+                '}';
     }
 }
