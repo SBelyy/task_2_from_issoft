@@ -1,5 +1,7 @@
 package domain;
 
+import java.util.Objects;
+
 public class OrderItem {
     private String name;
     private int quantity;
@@ -30,5 +32,18 @@ public class OrderItem {
                 " quantity=" + quantity +
                 " cost=" + cost +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        OrderItem orderItem = (OrderItem) o;
+        return quantity == orderItem.quantity && cost == orderItem.cost && Objects.equals(name, orderItem.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, quantity, cost);
     }
 }
