@@ -1,7 +1,9 @@
 package service;
 
-import model.Order;
-import model.OrderItem;
+import domain.Order;
+import domain.OrderItem;
+
+import java.util.List;
 
 import static com.google.common.base.Preconditions.*;
 
@@ -21,5 +23,12 @@ public class OrderValidator {
             checkNotNull(item, "Item in array is Null");
         }
         checkNotNull(order.getStatus(), "Status is Null");
+    }
+
+    public void validateOrders(List<Order> orders) {
+        for (Order order : orders) {
+            checkNotNull(order, "Order is Null");
+            validateOrderForPlace(order);
+        }
     }
 }
