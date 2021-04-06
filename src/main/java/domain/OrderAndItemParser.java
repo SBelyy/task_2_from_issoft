@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class FileUtils {
+public class OrderAndItemParser {
 
-    public List<Order> getOrdersFromLines(List<String> lines) {
+    public List<Order> getOrdersFromLines(List<String> lines, OrderItem[] itemsOrders) {
         List<Order> orders = new ArrayList<>();
 
         for (String line : lines) {

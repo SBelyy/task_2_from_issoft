@@ -17,17 +17,19 @@ class OrderItemStorageTest {
 
     @Test
     void persistItemInFile() {
-        OrderItem item = getValidItem();
+        OrderItem[] item = getValidItem();
+        String userId = "43565-43432-76-123-86";
 
-        final String id = itemStorage.persistItemInFile(item);
+        final String id = itemStorage.persistItem(item, userId);
         assertNotNull(id);
 
-        final OrderItem itemLoaded = itemStorage.loadItem(id);
+        final OrderItem[] itemLoaded = itemStorage.loadItem(userId);
 
         assertEquals(item, itemLoaded);
     }
 
-    private OrderItem getValidItem() {
-        return new OrderItem("TestName", 0, 0);
+    private OrderItem[] getValidItem() {
+        return new OrderItem[]{
+                new OrderItem("TestName", 0, 0)};
     }
 }

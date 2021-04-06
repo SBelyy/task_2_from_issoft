@@ -5,6 +5,7 @@ import domain.OrderItem;
 import domain.OrderStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import storage.OrderItemStorage;
 import storage.OrderStorage;
 
 import java.util.*;
@@ -19,13 +20,13 @@ class OrderServiceTest {
     private Order orderNotCorrect;
     private Order orderCorrect;
     private String userId;
-
-    private static final String FILE_NAME = "OrdersList.txt";
+    private String id;
 
     @BeforeEach
     public void before() {
         List<String> lines = Collections.singletonList("157a7604-7357-48db-8022-ac94bfe6b710,SBelyy,CREATED,1617649819917,Kurchatova 8,[OrderItem{name=Beer quantity=2 cost=4}]");
         userId = "SBelyy";
+        id = "167a7894-2157-64db-8022-ac94bfe6b710";
 
         orderNotCorrect = new Order("Vasia", new OrderItem[]{}, new Date(), "Sofii 15");
         orderCorrect = new Order(userId, new OrderItem[]{new OrderItem("Beer", 2, 4)},
@@ -36,15 +37,19 @@ class OrderServiceTest {
         OrderStorage orderStorage;
         orderStorage = mock(OrderStorage.class);
 
-        when(orderStorage.getAllOrdersFromFile(FILE_NAME)).thenReturn(lines);
-        when(orderStorage.persistOrderInFile(orderCorrect, FILE_NAME)).thenReturn(true);
+        when(orderStorage.loadAllOrders()).thenReturn(lines);
+        when(orderStorage.persistOrder(orderCorrect)).thenReturn(id);
 
-        orderService = new OrderService(orderStorage, new OrderValidator());
+        orderService = new OrderService(orderStorage, new OrderItemStorage(), new OrderValidator());
     }
 
     @Test
     void placeOrderTest() {
-        assertTrue(orderService.placeOrder(orderCorrect));
+        assertEquals(id, orderService.placeOrder(orderCorrect));
+
+        OrderStorage orderStorage = new OrderStorage();
+        assertEquals(orderCorrect, orderStorage.findOrderByUserId(orderCorrect.getUserId()));
+
         assertThrows(NullPointerException.class, () -> orderService.placeOrder(orderNotCorrect));
     }
 
@@ -55,6 +60,8 @@ class OrderServiceTest {
 
         assertNotNull(actualOrders);
         assertEquals(expectedOrders, actualOrders);
+
+        assertThrows(NullPointerException.class, () -> orderService.loadAllByUserId(null));
     }
 
 

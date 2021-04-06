@@ -1,8 +1,10 @@
 package service;
 
-import domain.FileUtils;
+import domain.OrderAndItemParser;
 import domain.Order;
+import domain.OrderItem;
 import domain.OrderStatus;
+import storage.OrderItemStorage;
 import storage.OrderStorage;
 
 import java.util.*;
@@ -12,46 +14,37 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class OrderService {
 
     private final OrderStorage orderStorage;
+    private final OrderItemStorage itemStorage;
     private final OrderValidator orderValidator;
 
-    private static final String FILE_NAME = "OrdersList.txt";
-
-    public OrderService(OrderStorage orderStorage, OrderValidator orderValidator) {
+    public OrderService(OrderStorage orderStorage, OrderItemStorage itemStorage, OrderValidator orderValidator) {
         this.orderStorage = orderStorage;
+        this.itemStorage = itemStorage;
         this.orderValidator = orderValidator;
     }
 
-    /**
-     * Creates an order and assigns an "almost" unique ID to it
-     */
-    public String createOrder(Order order) {
-        orderValidator.validateOrderForCreate(order);
+    public String placeOrder(Order order) {
+        orderValidator.validateOrderForPlace(order);
 
-        final String id = UUID.randomUUID().toString();
+        final String id = orderStorage.persistOrder(order);
         order.setId(id);
         order.setStatus(OrderStatus.CREATED);
+
+        itemStorage.persistItem(order.getItems(), id);
 
         return id;
     }
 
-    /**
-     * The method puts Order passed to it into a text file and returns an true if successful
-     */
-    public boolean placeOrder(Order order) {
-        orderValidator.validateOrderForPlace(order);
-
-        return orderStorage.persistOrderInFile(order, FILE_NAME);
-    }
-
-    /**
-     * This method returns a List<Order> by the userId that was received when reading the file
-     */
     public List<Order> loadAllByUserId(String userId) {
-        List<String> lines = orderStorage.getAllOrdersFromFile(FILE_NAME);
+        List<String> lines = orderStorage.loadAllOrders();
 
         checkNotNull(lines);
 
-        List<Order> orders = new FileUtils().getOrdersFromLines(lines);
+        if (userId == null)
+            throw new NullPointerException();
+
+        OrderItem[] items = itemStorage.loadItem(userId);
+        List<Order> orders = new OrderAndItemParser().getOrdersFromLines(lines, items);
         orderValidator.validateOrders(orders);
 
         List<Order> targetOrders = new ArrayList<>();
