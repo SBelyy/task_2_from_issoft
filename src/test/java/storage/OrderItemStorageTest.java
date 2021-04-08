@@ -20,10 +20,10 @@ class OrderItemStorageTest {
         OrderItem[] item = getValidItem();
         String userId = "43565-43432-76-123-86";
 
-        final String id = itemStorage.persistItem(item, userId);
+        final String id = itemStorage.persistItems(item);
         assertNotNull(id);
 
-        final OrderItem[] itemLoaded = itemStorage.loadItem(userId);
+        final OrderItem[] itemLoaded = itemStorage.loadItemsById(userId);
 
         assertEquals(item, itemLoaded);
     }

@@ -14,11 +14,9 @@ public class OrderValidator {
         checkNotNull(order.getItems(), "Array items is Null");
         checkNotNull(order.getDeliveryAddress(), "Delivery address is Null");
         checkNotNull(order.getOrderDate(), "Order date is Null");
-        checkNotNull(order.getId(), "Id is Null");
         for (OrderItem item : order.getItems()) {
             checkNotNull(item, "Item in array is Null");
         }
-        checkNotNull(order.getStatus(), "Status is Null");
     }
 
     public void validateOrders(List<Order> orders) {

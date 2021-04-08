@@ -16,7 +16,7 @@ public class OrderStorage {
 
     private static final Logger logger = LoggerFactory.getLogger(OrderStorage.class);
 
-    public Order findOrderByUserId(String userId) {
+    public Order[] findOrdersByUserId(String userId) {
         throw new UnsupportedOperationException("The method has no implementation yet");
     }
 

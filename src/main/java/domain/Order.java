@@ -8,8 +8,9 @@ public class Order {
 
     private String id;
     private OrderStatus status;
+    private OrderItem[] items;
+    private String itemId;
     private final String userId;
-    private final OrderItem[] items;
     private final Date orderDate;
     private final String deliveryAddress;
 
@@ -23,6 +24,14 @@ public class Order {
 
     public void setStatus(OrderStatus status) {
         this.status = status;
+    }
+
+    public void setItems(OrderItem[] items) {
+        this.items = items;
+    }
+
+    public void setItemId(String itemId) {
+        this.itemId = itemId;
     }
 
     public String getId() {
@@ -43,6 +52,10 @@ public class Order {
 
     public Date getOrderDate() {
         return orderDate;
+    }
+
+    public String getItemId() {
+        return itemId;
     }
 
     public String getDeliveryAddress() {

@@ -30,7 +30,8 @@ public class OrderService {
         order.setId(id);
         order.setStatus(OrderStatus.CREATED);
 
-        itemStorage.persistItem(order.getItems(), id);
+        final String itemId = itemStorage.persistItems(order.getItems());
+        order.setItemId(itemId);
 
         return id;
     }
@@ -38,18 +39,17 @@ public class OrderService {
     public List<Order> loadAllByUserId(String userId) {
         List<String> lines = orderStorage.loadAllOrders();
 
-        checkNotNull(lines);
-
-        if (userId == null)
+        if (userId == null || lines == null)
             throw new NullPointerException();
 
-        OrderItem[] items = itemStorage.loadItem(userId);
-        List<Order> orders = new OrderAndItemParser().getOrdersFromLines(lines, items);
+        List<Order> orders = new OrderAndItemParser().getOrdersFromLines(lines);
         orderValidator.validateOrders(orders);
 
         List<Order> targetOrders = new ArrayList<>();
         for (Order order : orders) {
             if (order.getUserId().equals(userId)) {
+                OrderItem[] items = itemStorage.loadItemsById(order.getItemId());
+                order.setItems(items);
                 targetOrders.add(order);
             }
         }

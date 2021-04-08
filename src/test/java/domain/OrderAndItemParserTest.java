@@ -25,7 +25,7 @@ class OrderAndItemParserTest {
         expectedList.add(expected);
 
         OrderAndItemParser parser = new OrderAndItemParser();
-        List<Order> ordersActual = parser.getOrdersFromLines(lines, new OrderItem[]{});
+        List<Order> ordersActual = parser.getOrdersFromLines(lines);
 
         assertEquals(expectedList, ordersActual);
     }

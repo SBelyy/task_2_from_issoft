@@ -6,7 +6,7 @@ import java.util.List;
 
 public class OrderAndItemParser {
 
-    public List<Order> getOrdersFromLines(List<String> lines, OrderItem[] itemsOrders) {
+    public List<Order> getOrdersFromLines(List<String> lines) {
         List<Order> orders = new ArrayList<>();
 
         for (String line : lines) {
