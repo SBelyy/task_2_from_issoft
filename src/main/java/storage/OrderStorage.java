@@ -1,6 +1,8 @@
 package storage;
 
+import com.google.common.base.Preconditions;
 import domain.Order;
+import domain.OrderAndItemParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,7 +39,7 @@ public class OrderStorage {
         return id;
     }
 
-    public List<String> loadAllOrders() {
+    public List<Order> loadAllOrders() {
         List<String> lines = null;
         logger.debug("Start reading from file");
         try {
@@ -47,7 +49,7 @@ public class OrderStorage {
         } catch (IOException exception) {
             logger.error("File read error");
         }
-        return lines;
+        return new OrderAndItemParser().getOrdersFromLines(lines);
     }
 
     public List<String> loadOrdersById(String userId) {

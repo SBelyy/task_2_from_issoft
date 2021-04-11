@@ -52,8 +52,8 @@ class OrderServiceTest {
 
     @Test
     void loadAllByUserIdTest() {
-        List<String> lines = Collections.singletonList("157a7604-7357-48db-8022-ac94bfe6b710,SBelyy," +
-                "CREATED,1617649819917,Kurchatova 8,[OrderItem{name=Beer quantity=2 cost=4}]");
+        List<Order> ordersStore = getCorrectListOrders();
+        ordersStore.get(0).setItems(new OrderItem[]{});
         OrderItem[] items = new OrderItem[]{new OrderItem("Beer", 2, 4)};
         List<Order> orders = getCorrectListOrders();
 
@@ -64,7 +64,7 @@ class OrderServiceTest {
 
         assertThrows(NullPointerException.class, () -> orderService.loadAllByUserId(null));
 
-        when(orderStorage.loadAllOrders()).thenReturn(lines);
+        when(orderStorage.loadAllOrders()).thenReturn(ordersStore);
         when(itemStorage.loadItemsById(null)).thenReturn(items);
         assertEquals(orders, orderService.loadAllByUserId("SBelyy"));
     }

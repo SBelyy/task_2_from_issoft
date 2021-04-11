@@ -37,12 +37,11 @@ public class OrderService {
     }
 
     public List<Order> loadAllByUserId(String userId) {
-        List<String> lines = orderStorage.loadAllOrders();
+        List<Order> orders = orderStorage.loadAllOrders();
 
-        if (userId == null || lines == null)
+        if (userId == null || orders == null)
             throw new NullPointerException();
 
-        List<Order> orders = new OrderAndItemParser().getOrdersFromLines(lines);
         orderValidator.validateOrders(orders);
 
         List<Order> targetOrders = new ArrayList<>();
